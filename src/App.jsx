@@ -9,38 +9,39 @@ const App = () => {
   const [finalizados, setFinalizados] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  // Produtos iniciais
+  // Produtos atualizados com as correções
   const produtosIniciais = [
-    { id: 1, categoria: 'DIVERSOS', nome: 'Pirulito de chocolate e de marshmallow', preco: 1.70 },
-    { id: 2, categoria: 'DIVERSOS', nome: 'Maçã do amor', preco: 2.50 },
-    { id: 3, categoria: 'DIVERSOS', nome: 'Mini trufas', preco: 1.50 },
-    { id: 4, categoria: 'DIVERSOS', nome: 'Mini donuts', preco: 1.50 },
-    { id: 5, categoria: 'DIVERSOS', nome: 'Cone Trufado', preco: 3.50 },
-    { id: 6, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Copo 200ml', preco: 1.50 },
-    { id: 7, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Potinho', preco: 1.70 },
-    { id: 8, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Saquinho', preco: 1.70 },
-    { id: 9, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Copo 300ml', preco: 2.00 },
-    { id: 10, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Casquinha', preco: 3.00 },
-    { id: 11, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Copo 200ml', preco: 1.50 },
-    { id: 12, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Potinho', preco: 1.70 },
-    { id: 13, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Copo 300ml', preco: 2.00 },
-    { id: 14, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Palito', preco: 4.00 },
-    { id: 15, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Casquinha', preco: 3.50 },
-    { id: 16, categoria: 'CJ ALGODÃO DOCE', nome: 'Algodão doce no pote + Maçã do amor', preco: 3.70 },
-    { id: 17, categoria: 'CJ ALGODÃO DOCE', nome: 'Copo bolha - Algodão doce + Pipoca colorida', preco: 3.00 },
-    { id: 18, categoria: 'CJ ALGODÃO DOCE', nome: 'Copo bolha - Algodão doce + Marshmallow', preco: 3.50 },
-    { id: 19, categoria: 'CJ ALGODÃO DOCE', nome: 'Copo bolha - Algodão doce + Bis', preco: 4.00 },
-    { id: 20, categoria: 'CJ ALGODÃO DOCE', nome: 'Copo bolha - Algodão doce + Jujuba', preco: 4.00 },
-    { id: 21, categoria: 'BOLO NA MARMITINHA', nome: 'Bolo na Marmitinha - 1 sabor de recheio', preco: 4.00 },
-    { id: 22, categoria: 'BOLO NA MARMITINHA', nome: 'Bolo na Marmitinha - 2 sabores de recheio', preco: 5.00 },
-    { id: 23, categoria: 'BALAS PERSONALIZADAS', nome: '100 Balas personalizadas', preco: 40.00 },
-    { id: 24, categoria: 'BALAS PERSONALIZADAS', nome: '100 Balas personalizadas + 1 balde personalizado', preco: 45.00 },
-    { id: 25, categoria: 'DOCES PERSONALIZADOS', nome: 'Bolo no palito', preco: 9.00 },
-    { id: 26, categoria: 'DOCES PERSONALIZADOS', nome: 'Choco Maçã', preco: 7.00 },
-    { id: 27, categoria: 'DOCES PERSONALIZADOS', nome: 'Cupcake', preco: 6.00 },
-    { id: 28, categoria: 'DOCES PERSONALIZADOS', nome: 'Pirulito', preco: 5.00 },
-    { id: 29, categoria: 'DOCES PERSONALIZADOS', nome: 'Trufas', preco: 3.00 },
-    { id: 30, categoria: 'DOCES PERSONALIZADOS', nome: 'Porta retrato de chocolate - unidade', preco: 6.00 }
+    { id: 1, categoria: 'DIVERSOS', nome: 'Pirulito de chocolate', preco: 1.70 },
+    { id: 2, categoria: 'DIVERSOS', nome: 'Pirulito de marshmallow', preco: 1.70 },
+    { id: 3, categoria: 'DIVERSOS', nome: 'Maçã do amor', preco: 2.50 },
+    { id: 4, categoria: 'DIVERSOS', nome: 'Mini trufas', preco: 1.50 },
+    { id: 5, categoria: 'DIVERSOS', nome: 'Mini donuts', preco: 1.50 },
+    { id: 6, categoria: 'DIVERSOS', nome: 'Cone Trufado', preco: 3.50 },
+    { id: 7, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Copo 200ml', preco: 1.50 },
+    { id: 8, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Potinho', preco: 1.70 },
+    { id: 9, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Saquinho', preco: 1.70 },
+    { id: 10, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Copo 300ml', preco: 2.00 },
+    { id: 11, categoria: 'PIPOCA COLORIDA', nome: 'Pipoca colorida - Casquinha', preco: 3.00 },
+    { id: 12, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Copo 200ml', preco: 1.50 },
+    { id: 13, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Potinho', preco: 1.70 },
+    { id: 14, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Copo 300ml', preco: 2.00 },
+    { id: 15, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Palito', preco: 4.00 },
+    { id: 16, categoria: 'ALGODÃO DOCE', nome: 'Algodão doce - Casquinha', preco: 3.50 },
+    { id: 17, categoria: 'CJ ALGODÃO DOCE', nome: 'Algodão doce no pote + Maçã do amor', preco: 3.70 },
+    { id: 18, categoria: 'CJ ALGODÃO DOCE', nome: 'Copo bolha - Algodão doce + Pipoca colorida', preco: 3.00 },
+    { id: 19, categoria: 'CJ ALGODÃO DOCE', nome: 'Copo bolha - Algodão doce + Marshmallow', preco: 3.50 },
+    { id: 20, categoria: 'CJ ALGODÃO DOCE', nome: 'Copo bolha - Algodão doce + Bis', preco: 4.00 },
+    { id: 21, categoria: 'CJ ALGODÃO DOCE', nome: 'Copo bolha - Algodão doce + Jujuba', preco: 4.00 },
+    { id: 22, categoria: 'BOLO NA MARMITINHA', nome: 'Bolo na Marmitinha - 1 sabor de recheio', preco: 4.00 },
+    { id: 23, categoria: 'BOLO NA MARMITINHA', nome: 'Bolo na Marmitinha - 2 sabores de recheio', preco: 5.00 },
+    { id: 24, categoria: 'BALAS PERSONALIZADAS', nome: '100 Balas personalizadas', preco: 40.00 },
+    { id: 25, categoria: 'BALAS PERSONALIZADAS', nome: '100 Balas personalizadas + 1 balde personalizado', preco: 45.00 },
+    { id: 26, categoria: 'DOCES PERSONALIZADOS', nome: 'Bolo no palito', preco: 9.00 },
+    { id: 27, categoria: 'DOCES PERSONALIZADOS', nome: 'Choco Maçã', preco: 7.00 },
+    { id: 28, categoria: 'DOCES PERSONALIZADOS', nome: 'Cupcake', preco: 6.00 },
+    { id: 29, categoria: 'DOCES PERSONALIZADOS', nome: 'Pirulito decorado c/pasta americana', preco: 5.00 },
+    { id: 30, categoria: 'DOCES PERSONALIZADOS', nome: 'Trufas decoradas c/pasta americana', preco: 3.00 },
+    { id: 31, categoria: 'DOCES PERSONALIZADOS', nome: 'Porta retrato de chocolate - unidade', preco: 6.00 }
   ];
 
   const [produtos, setProdutos] = useState(produtosIniciais);
@@ -50,6 +51,7 @@ const App = () => {
   const [nomeCliente, setNomeCliente] = useState('');
   const [showClienteInput, setShowClienteInput] = useState(false);
   const [dataEntrega, setDataEntrega] = useState('');
+  const [valorSinal, setValorSinal] = useState('');
   const [showDataEntrega, setShowDataEntrega] = useState(false);
   const [mesSelected, setMesSelected] = useState(new Date().getMonth() + 1);
   const [anoSelected, setAnoSelected] = useState(new Date().getFullYear());
@@ -165,17 +167,22 @@ const App = () => {
   };
 
   const confirmarOrcamento = (orcamentoId) => {
-    if (!dataEntrega) return;
+    if (!dataEntrega || !valorSinal) return;
 
     const orcamento = orcamentos.find(o => o.id === orcamentoId);
+    const sinalNumerico = parseFloat(valorSinal.replace(',', '.')) || 0;
+    
     const novoPedido = {
       ...orcamento,
-      dataEntrega: new Date(dataEntrega).toISOString()
+      dataEntrega: new Date(dataEntrega).toISOString(),
+      sinal: sinalNumerico,
+      restante: orcamento.total - sinalNumerico
     };
 
     setPedidos([...pedidos, novoPedido]);
     setOrcamentos(orcamentos.filter(o => o.id !== orcamentoId));
     setDataEntrega('');
+    setValorSinal('');
     setShowDataEntrega(false);
   };
 
@@ -484,6 +491,17 @@ const App = () => {
                       onChange={(e) => setDataEntrega(e.target.value)}
                       className="w-full p-2 border border-gray-300 rounded-md mb-3"
                     />
+                    
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Valor do Sinal</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={valorSinal}
+                      onChange={(e) => setValorSinal(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md mb-3"
+                      placeholder="0,00"
+                    />
+                    
                     <div className="flex gap-2">
                       <button
                         onClick={() => confirmarOrcamento(orcamento.id)}
@@ -551,9 +569,21 @@ const App = () => {
                     <div className="text-sm font-medium text-blue-600">
                       Entrega: {formatDate(pedido.dataEntrega)}
                     </div>
+                    {pedido.sinal > 0 && (
+                      <div className="text-sm text-gray-600">
+                        Sinal: {formatCurrency(pedido.sinal)}
+                      </div>
+                    )}
                   </div>
-                  <div className="text-lg font-bold text-green-600">
-                    {formatCurrency(pedido.total)}
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-green-600">
+                      {formatCurrency(pedido.total)}
+                    </div>
+                    {pedido.sinal > 0 && (
+                      <div className="text-sm font-medium text-orange-600">
+                        Restante: {formatCurrency(pedido.restante)}
+                      </div>
+                    )}
                   </div>
                 </div>
                 
