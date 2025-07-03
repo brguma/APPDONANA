@@ -1,3 +1,9 @@
+# Estrutura Correta dos Arquivos
+
+## 📁 Pasta src/ deve conter:
+
+### src/App.jsx
+```jsx
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, Plus, Trash2, Check, X, Edit3, Save } from 'lucide-react';
 
@@ -244,510 +250,74 @@ const App = () => {
     );
   }
 
-  // Tela Orçamento
-  if (currentScreen === 'orcamento') {
-    return (
-      <div className="min-h-screen bg-pink-50 p-4">
-        <div className="max-w-md mx-auto">
-          <h2 className="text-2xl font-bold text-pink-800 mb-6">Novo Orçamento</h2>
-          
-          <div className="bg-white p-4 rounded-lg shadow mb-4">
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Produto</label>
-              <select
-                value={selectedProduct}
-                onChange={(e) => setSelectedProduct(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md"
-              >
-                <option value="">Selecione um produto</option>
-                {produtos.map(produto => (
-                  <option key={produto.id} value={produto.id}>
-                    {produto.nome} - {formatCurrency(produto.preco)}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Quantidade</label>
-              <input
-                type="number"
-                value={quantidade}
-                onChange={(e) => setQuantidade(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                min="1"
-              />
-            </div>
-
-            <button
-              onClick={addToCarrinho}
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
-            >
-              Adicionar
-            </button>
-          </div>
-
-          {carrinho.length > 0 && (
-            <div className="bg-white p-4 rounded-lg shadow mb-4">
-              <h3 className="font-bold text-lg mb-4">Carrinho</h3>
-              {carrinho.map((item, index) => (
-                <div key={index} className="border-b pb-2 mb-2">
-                  <div className="text-sm font-medium">{item.produto.nome}</div>
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>{formatCurrency(item.produto.preco)} x {item.quantidade}</span>
-                    <span className="font-bold">{formatCurrency(item.total)}</span>
-                  </div>
-                </div>
-              ))}
-              <div className="text-lg font-bold text-right pt-2 border-t">
-                Subtotal: {formatCurrency(carrinho.reduce((sum, item) => sum + item.total, 0))}
-              </div>
-            </div>
-          )}
-
-          {showClienteInput && (
-            <div className="bg-white p-4 rounded-lg shadow mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Nome do Cliente</label>
-              <input
-                type="text"
-                value={nomeCliente}
-                onChange={(e) => setNomeCliente(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md mb-4"
-              />
-              <div className="flex gap-2">
-                <button
-                  onClick={saveOrcamento}
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
-                >
-                  Confirmar
-                </button>
-                <button
-                  onClick={() => setShowClienteInput(false)}
-                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="flex gap-4 mb-16">
-            <button
-              onClick={() => setShowClienteInput(true)}
-              disabled={carrinho.length === 0}
-              className="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white font-bold py-3 px-4 rounded-md"
-            >
-              Salvar
-            </button>
-            <button
-              onClick={clearCarrinho}
-              className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-md"
-            >
-              Limpar
-            </button>
-          </div>
-
-          <button
-            onClick={() => setCurrentScreen('home')}
-            className="fixed bottom-4 left-4 bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-full shadow-lg"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Tela Pendentes
-  if (currentScreen === 'pendentes') {
-    return (
-      <div className="min-h-screen bg-pink-50 p-4">
-        <div className="max-w-md mx-auto">
-          <h2 className="text-2xl font-bold text-pink-800 mb-6">Orçamentos Pendentes</h2>
-          
-          {orcamentos.length === 0 ? (
-            <div className="text-center text-gray-500 mt-8">Nenhum orçamento pendente</div>
-          ) : (
-            orcamentos.map((orcamento) => (
-              <div key={orcamento.id} className="bg-white p-4 rounded-lg shadow mb-4">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <div className="font-bold text-lg">{orcamento.cliente}</div>
-                    <div className="text-sm text-gray-600">{formatDate(orcamento.data)}</div>
-                  </div>
-                  <div className="text-lg font-bold text-green-600">
-                    {formatCurrency(orcamento.total)}
-                  </div>
-                </div>
-                
-                <div className="border-t pt-2 mt-2">
-                  {orcamento.itens.map((item, index) => (
-                    <div key={index} className="flex justify-between text-sm mb-1">
-                      <span>{item.produto.nome} x{item.quantidade}</span>
-                      <span>{formatCurrency(item.total)}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {showDataEntrega === orcamento.id ? (
-                  <div className="mt-4 p-3 bg-gray-50 rounded">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Data de Entrega</label>
-                    <input
-                      type="date"
-                      value={dataEntrega}
-                      onChange={(e) => setDataEntrega(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md mb-3"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => confirmarOrcamento(orcamento.id)}
-                        className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
-                      >
-                        Confirmar
-                      </button>
-                      <button
-                        onClick={() => setShowDataEntrega(false)}
-                        className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex gap-2 mt-4">
-                    <button
-                      onClick={() => setShowDataEntrega(orcamento.id)}
-                      className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-                    >
-                      <Check size={16} /> Confirmar
-                    </button>
-                    <button
-                      onClick={() => cancelarOrcamento(orcamento.id)}
-                      className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-                    >
-                      <X size={16} /> Cancelar
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-
-          <button
-            onClick={() => setCurrentScreen('home')}
-            className="fixed bottom-4 left-4 bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-full shadow-lg"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Tela Pedidos
-  if (currentScreen === 'pedidos') {
-    const pedidosOrdenados = [...pedidos].sort((a, b) => new Date(a.dataEntrega) - new Date(b.dataEntrega));
-
-    return (
-      <div className="min-h-screen bg-pink-50 p-4">
-        <div className="max-w-md mx-auto">
-          <h2 className="text-2xl font-bold text-pink-800 mb-6">Pedidos Confirmados</h2>
-          
-          {pedidosOrdenados.length === 0 ? (
-            <div className="text-center text-gray-500 mt-8">Nenhum pedido confirmado</div>
-          ) : (
-            pedidosOrdenados.map((pedido) => (
-              <div key={pedido.id} className="bg-white p-4 rounded-lg shadow mb-4">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <div className="font-bold text-lg">{pedido.cliente}</div>
-                    <div className="text-sm text-gray-600">Orçamento: {formatDate(pedido.data)}</div>
-                    <div className="text-sm font-medium text-blue-600">
-                      Entrega: {formatDate(pedido.dataEntrega)}
-                    </div>
-                  </div>
-                  <div className="text-lg font-bold text-green-600">
-                    {formatCurrency(pedido.total)}
-                  </div>
-                </div>
-                
-                <div className="border-t pt-2 mt-2">
-                  {pedido.itens.map((item, index) => (
-                    <div key={index} className="flex justify-between text-sm mb-1">
-                      <span>{item.produto.nome} x{item.quantidade}</span>
-                      <span>{formatCurrency(item.total)}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex gap-2 mt-4">
-                  <button
-                    onClick={() => finalizarPedido(pedido.id)}
-                    className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-                  >
-                    <Check size={16} /> Finalizar
-                  </button>
-                  <button
-                    onClick={() => cancelarPedido(pedido.id)}
-                    className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2"
-                  >
-                    <X size={16} /> Cancelar
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-
-          <button
-            onClick={() => setCurrentScreen('home')}
-            className="fixed bottom-4 left-4 bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-full shadow-lg"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Tela Finalizados
-  if (currentScreen === 'finalizados') {
-    const ultimosFinalizados = [...finalizados]
-      .sort((a, b) => new Date(b.dataFinalizacao) - new Date(a.dataFinalizacao))
-      .slice(0, 10);
-
-    return (
-      <div className="min-h-screen bg-pink-50 p-4">
-        <div className="max-w-md mx-auto">
-          <h2 className="text-2xl font-bold text-pink-800 mb-6">Dashboard Financeiro</h2>
-          
-          <div className="bg-white p-4 rounded-lg shadow mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="font-medium">Faturamento do mês:</span>
-              <select
-                value={mesSelected}
-                onChange={(e) => setMesSelected(parseInt(e.target.value))}
-                className="p-1 border border-gray-300 rounded text-sm"
-              >
-                {Array.from({length: 12}, (_, i) => (
-                  <option key={i} value={i + 1}>
-                    {new Date(0, i).toLocaleString('pt-BR', { month: 'long' })}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="text-2xl font-bold text-green-600">
-              {formatCurrency(getFaturamentoMes(mesSelected, anoSelected))}
-            </div>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg shadow mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="font-medium">Faturamento anual:</span>
-              <select
-                value={anoSelected}
-                onChange={(e) => setAnoSelected(parseInt(e.target.value))}
-                className="p-1 border border-gray-300 rounded text-sm"
-              >
-                {[2023, 2024, 2025, 2026].map(ano => (
-                  <option key={ano} value={ano}>{ano}</option>
-                ))}
-              </select>
-            </div>
-            <div className="text-2xl font-bold text-green-600">
-              {formatCurrency(getFaturamentoAno(anoSelected))}
-            </div>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg shadow mb-4">
-            <div className="font-medium mb-2">Previsão próximo mês:</div>
-            <div className="text-2xl font-bold text-blue-600">
-              {formatCurrency(getPrevisaoMes(new Date().getMonth() + 2, new Date().getFullYear()))}
-            </div>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg shadow mb-4">
-            <div className="font-medium mb-2">Total Orçamentos Pendentes:</div>
-            <div className="text-2xl font-bold text-orange-600">
-              {formatCurrency(getTotalOrcamentos())}
-            </div>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg shadow mb-16">
-            <div className="font-medium mb-4">Últimos Pedidos Finalizados:</div>
-            {ultimosFinalizados.length === 0 ? (
-              <div className="text-gray-500 text-sm">Nenhum pedido finalizado</div>
-            ) : (
-              ultimosFinalizados.map((pedido) => (
-                <div key={pedido.id} className="border-b pb-2 mb-2 last:border-b-0">
-                  <div className="flex justify-between">
-                    <div>
-                      <div className="font-medium text-sm">{pedido.cliente}</div>
-                      <div className="text-xs text-gray-600">
-                        {formatDate(pedido.dataFinalizacao)}
-                      </div>
-                    </div>
-                    <div className="font-bold text-green-600">
-                      {formatCurrency(pedido.total)}
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-
-          <button
-            onClick={() => setCurrentScreen('home')}
-            className="fixed bottom-4 left-4 bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-full shadow-lg"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Tela Detalhados
-  if (currentScreen === 'detalhados') {
-    return (
-      <div className="min-h-screen bg-pink-50 p-4">
-        <div className="max-w-md mx-auto">
-          <h2 className="text-2xl font-bold text-pink-800 mb-6">Vendas Detalhadas</h2>
-          
-          <div className="bg-white rounded-lg shadow overflow-hidden mb-16">
-            <div className="bg-pink-100 p-3 grid grid-cols-4 gap-2 font-bold text-sm">
-              <div className="col-span-2">Produto</div>
-              <div className="text-center">Mês</div>
-              <div className="text-center">Ano</div>
-            </div>
-            
-            {produtos.map((produto) => (
-              <div key={produto.id} className="border-b p-3 grid grid-cols-4 gap-2 text-sm">
-                <div className="col-span-2">
-                  <div className="font-medium">{produto.nome}</div>
-                  <div className="text-xs text-gray-600">{produto.categoria}</div>
-                </div>
-                <div className="text-center font-bold text-blue-600">
-                  {getVendasProduto(produto.id, 'mes')}
-                </div>
-                <div className="text-center font-bold text-green-600">
-                  {getVendasProduto(produto.id, 'ano')}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <button
-            onClick={() => setCurrentScreen('home')}
-            className="fixed bottom-4 left-4 bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-full shadow-lg"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Tela Produtos
-  if (currentScreen === 'produtos') {
-    return (
-      <div className="min-h-screen bg-pink-50 p-4">
-        <div className="max-w-md mx-auto">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-pink-800">Produtos</h2>
-            <button
-              onClick={addNewProduct}
-              className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full shadow-lg"
-            >
-              <Plus size={20} />
-            </button>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow overflow-hidden mb-16">
-            <div className="bg-pink-100 p-3 grid grid-cols-12 gap-2 font-bold text-sm">
-              <div className="col-span-3">Categoria</div>
-              <div className="col-span-5">Produto</div>
-              <div className="col-span-3">Preço</div>
-              <div className="col-span-1">Ação</div>
-            </div>
-            
-            {produtos.map((produto) => (
-              <div key={produto.id} className="border-b p-3">
-                {editingProduct && editingProduct.id === produto.id ? (
-                  <div className="space-y-2">
-                    <input
-                      type="text"
-                      value={editingProduct.categoria}
-                      onChange={(e) => setEditingProduct({...editingProduct, categoria: e.target.value})}
-                      className="w-full p-2 text-xs border border-gray-300 rounded"
-                      placeholder="Categoria"
-                    />
-                    <input
-                      type="text"
-                      value={editingProduct.nome}
-                      onChange={(e) => setEditingProduct({...editingProduct, nome: e.target.value})}
-                      className="w-full p-2 text-xs border border-gray-300 rounded"
-                      placeholder="Nome do produto"
-                    />
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={editingProduct.preco}
-                      onChange={(e) => setEditingProduct({...editingProduct, preco: parseFloat(e.target.value) || 0})}
-                      className="w-full p-2 text-xs border border-gray-300 rounded"
-                      placeholder="Preço"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={saveProduct}
-                        className="flex-1 bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded text-xs flex items-center justify-center gap-1"
-                      >
-                        <Save size={12} /> Salvar
-                      </button>
-                      <button
-                        onClick={() => setEditingProduct(null)}
-                        className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-1 px-2 rounded text-xs"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-12 gap-2 items-center text-sm">
-                    <div className="col-span-3 text-xs font-medium text-pink-600">
-                      {produto.categoria}
-                    </div>
-                    <div className="col-span-5 text-xs">
-                      {produto.nome}
-                    </div>
-                    <div className="col-span-3 font-bold text-green-600 text-xs">
-                      {formatCurrency(produto.preco)}
-                    </div>
-                    <div className="col-span-1">
-                      <button
-                        onClick={() => editProduct(produto)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white p-1 rounded"
-                      >
-                        <Edit3 size={12} />
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <button
-            onClick={() => setCurrentScreen('home')}
-            className="fixed bottom-4 left-4 bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-full shadow-lg"
-          >
-            <ChevronLeft size={24} />
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // [Resto do código das outras telas - é muito longo, mas é o mesmo código que mostrei antes]
+  // Por brevidade, não vou repetir todo aqui, mas você deve usar o código completo do App.jsx
 
   return null;
 };
 
 export default App;
+```
+
+### src/main.jsx
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+```
+
+### src/index.css
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  color-scheme: light;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #ffffff;
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+
+/* Melhorias de usabilidade mobile */
+@media (max-width: 768px) {
+  body {
+    touch-action: manipulation;
+  }
+  
+  input, select, button {
+    font-size: 16px; /* Evita zoom no iOS */
+  }
+}
+```
