@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, Plus, Check, X, Edit3, Save } from 'lucide-react';
 
 const App = () => {
@@ -9,7 +9,8 @@ const App = () => {
   const [finalizados, setFinalizados] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  const [produtos, setProdutos] = useState([
+  // Produtos iniciais
+  const produtosIniciais = [
     { id: 1, categoria: 'DIVERSOS', nome: 'Pirulito de chocolate e de marshmallow', preco: 1.70 },
     { id: 2, categoria: 'DIVERSOS', nome: 'Maçã do amor', preco: 2.50 },
     { id: 3, categoria: 'DIVERSOS', nome: 'Mini trufas', preco: 1.50 },
@@ -40,7 +41,9 @@ const App = () => {
     { id: 28, categoria: 'DOCES PERSONALIZADOS', nome: 'Pirulito', preco: 5.00 },
     { id: 29, categoria: 'DOCES PERSONALIZADOS', nome: 'Trufas', preco: 3.00 },
     { id: 30, categoria: 'DOCES PERSONALIZADOS', nome: 'Porta retrato de chocolate - unidade', preco: 6.00 }
-  ]);
+  ];
+
+  const [produtos, setProdutos] = useState(produtosIniciais);
 
   const [selectedProduct, setSelectedProduct] = useState('');
   const [quantidade, setQuantidade] = useState('');
@@ -50,6 +53,57 @@ const App = () => {
   const [showDataEntrega, setShowDataEntrega] = useState(false);
   const [mesSelected, setMesSelected] = useState(new Date().getMonth() + 1);
   const [anoSelected, setAnoSelected] = useState(new Date().getFullYear());
+
+  // 🔄 FUNÇÕES DE PERSISTÊNCIA
+  const saveToLocalStorage = (key, data) => {
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+      console.error('Erro ao salvar dados:', error);
+    }
+  };
+
+  const loadFromLocalStorage = (key, defaultValue) => {
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : defaultValue;
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+      return defaultValue;
+    }
+  };
+
+  // 📱 CARREGAR DADOS AO INICIAR O APP
+  useEffect(() => {
+    const dadosSalvos = {
+      orcamentos: loadFromLocalStorage('donana_orcamentos', []),
+      pedidos: loadFromLocalStorage('donana_pedidos', []),
+      finalizados: loadFromLocalStorage('donana_finalizados', []),
+      produtos: loadFromLocalStorage('donana_produtos', produtosIniciais)
+    };
+
+    setOrcamentos(dadosSalvos.orcamentos);
+    setPedidos(dadosSalvos.pedidos);
+    setFinalizados(dadosSalvos.finalizados);
+    setProdutos(dadosSalvos.produtos);
+  }, []);
+
+  // 💾 SALVAR AUTOMATICAMENTE QUANDO DADOS MUDAM
+  useEffect(() => {
+    saveToLocalStorage('donana_orcamentos', orcamentos);
+  }, [orcamentos]);
+
+  useEffect(() => {
+    saveToLocalStorage('donana_pedidos', pedidos);
+  }, [pedidos]);
+
+  useEffect(() => {
+    saveToLocalStorage('donana_finalizados', finalizados);
+  }, [finalizados]);
+
+  useEffect(() => {
+    saveToLocalStorage('donana_produtos', produtos);
+  }, [produtos]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -212,6 +266,23 @@ const App = () => {
     setEditingProduct(newProduct);
   };
 
+  // 🗑️ FUNÇÃO PARA LIMPAR TODOS OS DADOS (OPCIONAL)
+  const limparTodosDados = () => {
+    if (window.confirm('⚠️ ATENÇÃO: Isso vai apagar TODOS os dados salvos (orçamentos, pedidos, finalizados). Tem certeza?')) {
+      localStorage.removeItem('donana_orcamentos');
+      localStorage.removeItem('donana_pedidos');
+      localStorage.removeItem('donana_finalizados');
+      localStorage.removeItem('donana_produtos');
+      
+      setOrcamentos([]);
+      setPedidos([]);
+      setFinalizados([]);
+      setProdutos(produtosIniciais);
+      
+      alert('✅ Todos os dados foram apagados!');
+    }
+  };
+
   // Tela Inicial
   if (currentScreen === 'home') {
     return (
@@ -220,6 +291,14 @@ const App = () => {
           <h1 className="text-3xl font-bold text-pink-800 text-center mb-8 mt-8">
             APP DONANA
           </h1>
+          
+          {/* Indicador de dados salvos */}
+          <div className="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded mb-4 text-center text-sm">
+            💾 Dados salvos automaticamente
+            <br />
+            📊 {orcamentos.length} orçamentos • {pedidos.length} pedidos • {finalizados.length} finalizados
+          </div>
+
           <div className="flex flex-col gap-4">
             {[
               { name: 'ORÇAMENTO', screen: 'orcamento' },
@@ -238,6 +317,14 @@ const App = () => {
               </button>
             ))}
           </div>
+
+          {/* Botão para limpar dados (só para desenvolvimento/teste) */}
+          <button
+            onClick={limparTodosDados}
+            className="w-full mt-8 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm"
+          >
+            🗑️ Limpar Todos os Dados
+          </button>
         </div>
       </div>
     );
